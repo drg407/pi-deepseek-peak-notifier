@@ -72,4 +72,4 @@ never crashes the session.
 
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE).
