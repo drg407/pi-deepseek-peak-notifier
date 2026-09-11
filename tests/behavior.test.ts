@@ -188,10 +188,10 @@ const OFFPEAK_NOW = "2026-09-10T12:00:00Z"; // Thursday, outside all windows
 // 11. session_start, hosted DeepSeek model (2026-09-11 addendum): warning, footer cleared
 {
 	process.env.DEEPSEEK_PEAK_FAKE_NOW = PEAK_NOW;
-	const hosted = { provider: "cloudflare-workers-ai", id: "@cf/deepseek-ai/deepseek-v4-pro-0813" };
+	const hosted = { provider: "cloudflare-ai-gateway", id: "workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813" };
 	const { ctx, calls } = makeCtx(hosted);
 	handlers.session_start({ reason: "startup" }, ctx);
-	const hostedText = "DeepSeek model is hosted via 'cloudflare-workers-ai' ('@cf/deepseek-ai/deepseek-v4-pro-0813') \u2014 DeepSeek peak pricing does not apply";
+	const hostedText = "DeepSeek model is hosted via 'cloudflare-ai-gateway' ('workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813') \u2014 DeepSeek peak pricing does not apply";
 	check(
 		"session_start hosted: warning notice naming provider + id",
 		calls.some((c) => c.text === hostedText && c.severity === "warning"),
@@ -208,7 +208,7 @@ const OFFPEAK_NOW = "2026-09-10T12:00:00Z"; // Thursday, outside all windows
 // 12. model_select -> hosted (from direct DeepSeek): warning + clear, no peak/off-peak notice
 {
 	process.env.DEEPSEEK_PEAK_FAKE_NOW = PEAK_NOW;
-	const hosted = { provider: "cloudflare-workers-ai", id: "@cf/deepseek-ai/deepseek-v4-pro-0813" };
+	const hosted = { provider: "cloudflare-ai-gateway", id: "workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813" };
 	const { ctx, calls } = makeCtx(hosted);
 	handlers.model_select({ model: hosted, previousModel: deepseek, source: "set" }, ctx);
 	check(
@@ -223,7 +223,7 @@ const OFFPEAK_NOW = "2026-09-10T12:00:00Z"; // Thursday, outside all windows
 // 13. hosted model, hasUI=false (print/json): no crash, zero calls
 {
 	process.env.DEEPSEEK_PEAK_FAKE_NOW = PEAK_NOW;
-	const hosted = { provider: "cloudflare-workers-ai", id: "@cf/deepseek-ai/deepseek-v4-pro-0813" };
+	const hosted = { provider: "cloudflare-ai-gateway", id: "workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813" };
 	const { ctx, calls } = makeCtx(hosted, /* hasUI */ false);
 	handlers.session_start({ reason: "startup" }, ctx);
 	check("hosted + hasUI=false: zero ui calls, no crash", calls.length === 0, JSON.stringify(calls));

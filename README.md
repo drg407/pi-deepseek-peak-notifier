@@ -51,18 +51,19 @@ pi -e git:github.com/drg407/pi-deepseek-peak-notifier
 ## Hosted DeepSeek models
 
 pi's built-in model registry includes DeepSeek models hosted by other
-providers (e.g. `cloudflare-workers-ai`'s `@cf/deepseek-ai/...`). Those are
-billed at the host's rates — DeepSeek's peak pricing does not apply — and
-the provider may have no auth configured at all.
+providers — both `cloudflare-workers-ai` (`@cf/deepseek-ai/...`) and
+`cloudflare-ai-gateway` (routes like `workers-ai/@cf/deepseek-ai/...`). Those
+are billed at the host's rates — DeepSeek's peak pricing does not apply —
+and the provider may have no auth configured at all.
 
 Watch out: `pi --model deepseek` is a **pattern**, not a `provider/id`. Bare
-`deepseek` resolved (verified 2026-09-11) to the unconfigured hosted model
-`@cf/deepseek-ai/deepseek-v4-pro-0813` — a model you cannot even talk to.
-For that case this extension fires a one-shot warning instead of any peak
-claim, and the footer stays clear:
+`deepseek` resolved (verified 2026-09-11, twice) to the unconfigured gateway
+model `workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813` — a model you cannot
+even talk to. For that case this extension fires a one-shot warning instead
+of any peak claim, and the footer stays clear:
 
 ```
-Warning: DeepSeek model is hosted via 'cloudflare-workers-ai' ('@cf/deepseek-ai/deepseek-v4-pro-0813') — DeepSeek peak pricing does not apply
+Warning: DeepSeek model is hosted via 'cloudflare-ai-gateway' ('workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813') — DeepSeek peak pricing does not apply
 ```
 
 To use the direct DeepSeek API, launch with the explicit form —

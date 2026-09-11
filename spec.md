@@ -125,9 +125,10 @@ None.
 
 Incident: `pi --model deepseek` is a pattern (pi help: "Model pattern or ID,
 supports provider/id"); bare `deepseek` resolved to the built-in,
-**unconfigured** hosted model `@cf/deepseek-ai/deepseek-v4-pro-0813`
-(provider field `cloudflare-workers-ai`; verified 2026-09-11 in the user's
-TUI footer). No peak/off-peak notice fired — correct per Requirement 5 —
+**unconfigured** gateway model
+`cloudflare-ai-gateway` / `workers-ai/@cf/deepseek-ai/deepseek-v4-pro-0813`
+(confirmed 2026-09-11 in the user's TUI: the hosted warning interpolated
+exactly these values). No peak/off-peak notice fired — correct per Requirement 5 —
 but the model was also unusable (no Workers AI auth) and the user got no
 signal.
 
