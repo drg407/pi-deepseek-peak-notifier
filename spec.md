@@ -84,6 +84,16 @@ The user never ends up paying DeepSeek peak (2×) rates without having been told
 - [ ] Manual: session started on a non-DeepSeek model → no notices, no footer status, no console
       errors from the extension.
 
+### Manual DoD status (2026-09-11)
+- Off-peak start notice + footer: **visually confirmed** in the user's TUI
+  (real clock): `Warning: ✅ Off-Peak Hours` at session start AND the
+  footer third line `deepseek: off-peak` (after the pi-token-footer 0.1.1
+  fix — see addenda 2026-09-11c/d).
+- Non-DeepSeek session silence: observed across multiple TUI sessions on
+  llamacpp/qwen-q4 (no notices, no status).
+- Real-clock peak warning: visually confirmed 2026-09-10 (outside these items).
+- Still open: FAKE_NOW peak start; Ctrl+P cycling.
+
 ## Constraints
 - Source lives in this project (`src/`); no npm dependencies.
 - All pi APIs used must be verified against docs/examples before use (no guessing: `notify`
@@ -179,3 +189,10 @@ rendered while pi-token-footer is active. One-shot notices are unaffected
 (chat stream, not footer). Workaround: `/token-footer` restores the built-in
 footer, which renders extension statuses on a dim third line. README updated
 with the caveat.
+
+## Addendum — 2026-09-11d: footer visible again (pi-token-footer 0.1.1)
+
+The footer gap from addendum 2026-09-11c is resolved on this machine:
+pi-token-footer 0.1.1 (local commit 594ba4e) renders extension statuses on a
+third dim line. Verified in the user's TUI 2026-09-11 (screenshot: footer
+third line `deepseek: off-peak` next to the visible off-peak notice).
