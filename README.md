@@ -1,0 +1,75 @@
+# pi-deepseek-peak-notifier
+
+A heads-up for the [pi coding agent](https://pi.dev) when your active model is DeepSeek
+during its 2× peak-pricing windows.
+
+```
+Warning: ⚠️ Peak Hours        ← one-shot notice, at session start or when you switch to DeepSeek
+…  ⚠️ deepseek: PEAK (2×)     ← persistent footer status while the active model is DeepSeek
+```
+
+Off-peak you instead get an info notice `✅ Off-Peak Hours` and footer status
+`deepseek: off-peak`. Switch to any non-DeepSeek model and the footer clears —
+no notice, no status.
+
+## The peak rule
+
+Per the [DeepSeek API pricing docs](https://api-docs.deepseek.com/quick_start/pricing/) (verified 2026-09-10):
+
+- Peak (2× rate): **Monday–Friday, 01:00–04:00 UTC and 06:00–10:00 UTC**;
+  all other hours are off-peak at half price.
+- Windows are hour-aligned, start-inclusive / end-exclusive
+  (`01:00:00 ≤ t < 04:00:00`, etc.) — exactly 04:00:00 UTC is already off-peak.
+- Windows are defined in UTC, so DST and local timezone never affect the
+  determination. (For reference, in America/New_York EDT the peak windows land
+  roughly 9 PM–midnight and 2–6 AM local.)
+
+## Install
+
+```bash
+pi install git:github.com/drg407/pi-deepseek-peak-notifier
+```
+
+Remove with `pi remove git:github.com/drg407/pi-deepseek-peak-notifier`.
+Or, for a quick try without installing:
+
+```bash
+pi -e git:github.com/drg407/pi-deepseek-peak-notifier
+```
+
+## Usage
+
+- Automatic — no configuration, no commands, no external services, no auth access.
+- The notice and footer update at `session_start` and `model_select`
+  (i.e. `Ctrl+P` / `/model`).
+- Only models whose provider is `deepseek` trigger anything; every other
+  provider is fully silent.
+- TUI only: in print / JSON / RPC modes the extension is inert.
+
+## What this extension does (and doesn't)
+
+- Hooks `session_start` and `model_select`; provider match is
+  `model.provider === "deepseek"`.
+- Peak determination is a pure function of the UTC clock (`src/peak.ts`) —
+  no network calls, no state kept, nothing sent anywhere.
+- Invalid dates are treated as off-peak and never throw.
+- It warns; it does not block, throttle, or change which model is used.
+
+## Development
+
+```bash
+npm test   # isPeak unit tests + extension behavior tests (plain node, Node 22+ strips the TS types)
+```
+
+Freeze the clock to exercise either branch at any wall-clock time (dev-only):
+
+```bash
+DEEPSEEK_PEAK_FAKE_NOW="2026-09-10T02:30:00Z" pi -e ./src/index.ts
+```
+
+A malformed `DEEPSEEK_PEAK_FAKE_NOW` falls through to the real clock — it
+never crashes the session.
+
+## License
+
+MIT

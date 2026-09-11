@@ -1,0 +1,36 @@
+{
+	"name": "pi-deepseek-peak-notifier",
+	"version": "0.1.0",
+	"description": "Warns pi coding agent users when the active model is DeepSeek during its 2× peak-pricing windows (Mon–Fri 01:00–04:00 & 06:00–10:00 UTC): a notice plus a persistent footer indicator.",
+	"keywords": [
+		"pi-package",
+		"pi",
+		"coding-agent",
+		"extension",
+		"deepseek",
+		"pricing",
+		"peak-hours"
+	],
+	"license": "MIT",
+	"author": "David Guevara",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/drg407/pi-deepseek-peak-notifier.git"
+	},
+	"pi": {
+		"extensions": [
+			"./src/index.ts"
+		]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-coding-agent": ">=0.1.0"
+	},
+	"peerDependenciesMeta": {
+		"@earendil-works/pi-coding-agent": {
+			"optional": true
+		}
+	},
+	"scripts": {
+		"test": "node tests/is_peak.test.ts && node tests/behavior.test.ts"
+	}
+}
