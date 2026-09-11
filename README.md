@@ -42,14 +42,39 @@ pi -e git:github.com/drg407/pi-deepseek-peak-notifier
 - Automatic — no configuration, no commands, no external services, no auth access.
 - The notice and footer update at `session_start` and `model_select`
   (i.e. `Ctrl+P` / `/model`).
-- Only models whose provider is `deepseek` trigger anything; every other
-  provider is fully silent.
+- Direct DeepSeek models (provider `deepseek`) get the peak/off-peak notice
+  and footer. A DeepSeek-named model under any other provider gets a one-shot
+  hosted warning and a cleared footer (see "Hosted DeepSeek models" below).
+  Every other model is fully silent.
 - TUI only: in print / JSON / RPC modes the extension is inert.
+
+## Hosted DeepSeek models
+
+pi's built-in model registry includes DeepSeek models hosted by other
+providers (e.g. `cloudflare-workers-ai`'s `@cf/deepseek-ai/...`). Those are
+billed at the host's rates — DeepSeek's peak pricing does not apply — and
+the provider may have no auth configured at all.
+
+Watch out: `pi --model deepseek` is a **pattern**, not a `provider/id`. Bare
+`deepseek` resolved (verified 2026-09-11) to the unconfigured hosted model
+`@cf/deepseek-ai/deepseek-v4-pro-0813` — a model you cannot even talk to.
+For that case this extension fires a one-shot warning instead of any peak
+claim, and the footer stays clear:
+
+```
+Warning: DeepSeek model is hosted via 'cloudflare-workers-ai' ('@cf/deepseek-ai/deepseek-v4-pro-0813') — DeepSeek peak pricing does not apply
+```
+
+To use the direct DeepSeek API, launch with the explicit form —
+`pi --model deepseek/deepseek-v4-pro` — or switch via the `Ctrl+P` picker,
+which lists only your configured providers.
 
 ## What this extension does (and doesn't)
 
-- Hooks `session_start` and `model_select`; provider match is
-  `model.provider === "deepseek"`.
+- Hooks `session_start` and `model_select`; classification is the pure,
+  exported `noticeKind(model)`: provider `deepseek` → peak/off-peak; any
+  other provider with a DeepSeek-named id → hosted warning; everything
+  else → silent.
 - Peak determination is a pure function of the UTC clock (`src/peak.ts`) —
   no network calls, no state kept, nothing sent anywhere.
 - Invalid dates are treated as off-peak and never throw.
@@ -58,7 +83,7 @@ pi -e git:github.com/drg407/pi-deepseek-peak-notifier
 ## Development
 
 ```bash
-npm test   # isPeak unit tests + extension behavior tests (plain node, Node 22+ strips the TS types)
+npm test   # isPeak unit tests + noticeKind hostile-input tests + extension behavior tests (plain node, Node 22+ strips the TS types)
 ```
 
 Freeze the clock to exercise either branch at any wall-clock time (dev-only):

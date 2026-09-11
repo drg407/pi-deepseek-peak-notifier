@@ -120,3 +120,31 @@ Planned before implementation.
 
 ## Open Questions
 None.
+
+## Addendum — 2026-09-11: hosted DeepSeek models (user-approved)
+
+Incident: `pi --model deepseek` is a pattern (pi help: "Model pattern or ID,
+supports provider/id"); bare `deepseek` resolved to the built-in,
+**unconfigured** hosted model `@cf/deepseek-ai/deepseek-v4-pro-0813`
+(provider field `cloudflare-workers-ai`; verified 2026-09-11 in the user's
+TUI footer). No peak/off-peak notice fired — correct per Requirement 5 —
+but the model was also unusable (no Workers AI auth) and the user got no
+signal.
+
+Change:
+- New pure, exported `noticeKind(model)` → `direct` | `hosted` | `none`
+  (`src/index.ts`), hostile-safe: absent model/id, wrong types, empty
+  strings, nested values — `tests/notice_kind.test.ts` (14 cases, all
+  green).
+- `hosted` (DeepSeek-named id under any non-direct provider) now fires a
+  one-shot `warning` notice — "DeepSeek model is hosted via
+  '<provider>' ('<id>') — DeepSeek peak pricing does not apply" — and
+  the footer is always cleared: a host-billed model never gets a DeepSeek
+  peak claim. Behavior tests 11–13 added to `tests/behavior.test.ts`.
+- RED proof (2026-09-11): mutating the hosted regex reds exactly the 4 hosted
+  classification cases; deleting the hosted notify branch reds exactly the 2
+  hosted behavior checks; byte-identical restore (cmp), suite green.
+- `direct` behavior is byte-identical to v1 (the original 12 behavior checks
+  pass unchanged).
+- Supersedes, for DeepSeek-named models: "Out of scope → Other providers"
+  and the README silence guarantee for "every other provider".

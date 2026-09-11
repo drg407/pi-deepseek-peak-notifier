@@ -31,6 +31,6 @@
 		}
 	},
 	"scripts": {
-		"test": "node tests/is_peak.test.ts && node tests/behavior.test.ts"
+		"test": "node tests/is_peak.test.ts && node tests/notice_kind.test.ts && node tests/behavior.test.ts"
 	}
 }
