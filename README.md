@@ -12,6 +12,14 @@ Off-peak you instead get a notice `✅ Off-Peak Hours` and footer status
 `deepseek: off-peak`. Switch to any non-DeepSeek model and the footer clears —
 no notice, no status.
 
+> **Footer caveat:** the persistent footer status is rendered by pi's
+> *built-in* footer. If you run a footer replacement — e.g.
+> [pi-token-footer](https://github.com/drg407/pi-token-footer) — the status
+> line is hidden (verified 2026-09-11: pi-token-footer's custom footer never
+> reads `footerData.getExtensionStatuses()`); the one-shot notices are
+> unaffected. pi-token-footer's `/token-footer` command restores the
+> built-in footer, which renders extension statuses on a third line.
+
 Both notices ride pi's `warning` channel. (pi's `info` severity renders as a
 dim, unprefixed chat line that is effectively invisible on some themes —
 verified in the author's TUI 2026-09-11 — so the extension opts into the one

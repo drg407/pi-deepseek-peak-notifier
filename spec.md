@@ -168,3 +168,14 @@ channel pi exposes: error / warning / else→dim-status, per
 hosted, and footer behavior unchanged. Behavior test 2 updated — it went RED
 on the old `info` assertion before the update (per-check RED). Supersedes
 Requirement 3's severity `info`.
+
+## Addendum — 2026-09-11c: footer status hidden by pi-token-footer
+
+Finding (2026-09-11, user's TUI + source): pi-token-footer installs a custom
+two-line footer via `ctx.ui.setFooter` and never reads
+`footerData.getExtensionStatuses()` — so the persistent footer status
+(`deepseek: off-peak` / `⚠️ deepseek: PEAK (2×)`) is stored but NOT
+rendered while pi-token-footer is active. One-shot notices are unaffected
+(chat stream, not footer). Workaround: `/token-footer` restores the built-in
+footer, which renders extension statuses on a dim third line. README updated
+with the caveat.
