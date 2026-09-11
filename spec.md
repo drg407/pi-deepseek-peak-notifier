@@ -149,3 +149,22 @@ Change:
   pass unchanged).
 - Supersedes, for DeepSeek-named models: "Out of scope → Other providers"
   and the README silence guarantee for "every other provider".
+
+## Addendum — 2026-09-11b: off-peak notice severity info → warning
+
+Symptom: `pi --model deepseek/deepseek-v4-pro` at off-peak showed no off-peak
+notice in the user's TUI. Ground truth (probe extension logging
+`session_start`/`model_select` in a real pi run, 2026-09-11): `ctx.model` IS
+set at `session_start` for a `--model` launch (full object, provider
+`deepseek`), and `model_select` does NOT fire at startup — so the extension
+did fire; the notice went through pi's `info` channel, which
+`showExtensionNotify` maps to `showStatus()`: a dim, unprefixed chat line.
+The footer status line renders dim too (interactive footer.js). On the user's
+theme both were invisible.
+
+Change: off-peak severity `info` → `warning` (the only high-contrast one-shot
+channel pi exposes: error / warning / else→dim-status, per
+`dist/modes/interactive/interactive-mode.js` `showExtensionNotify`). Peak,
+hosted, and footer behavior unchanged. Behavior test 2 updated — it went RED
+on the old `info` assertion before the update (per-check RED). Supersedes
+Requirement 3's severity `info`.

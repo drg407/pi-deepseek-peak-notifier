@@ -4,7 +4,10 @@
  * Warns at session_start / model_select when the active model is DeepSeek,
  * and keeps a persistent footer indicator:
  *   peak window -> warning "⚠️ Peak Hours"    + footer "⚠️ deepseek: PEAK (2×)"
- *   off-peak    -> info    "✅ Off-Peak Hours" + footer "deepseek: off-peak"
+ *   off-peak    -> warning "✅ Off-Peak Hours" + footer "deepseek: off-peak"
+ * (Off-peak uses the warning channel on purpose: pi's info severity renders as a
+ * dim, unprefixed line that is invisible on some themes — verified in the
+ * user's TUI 2026-09-11. The emoji disambiguates the two notice kinds.)
  * A DeepSeek-NAMED model under another provider (e.g. cloudflare-workers-ai
  * "@cf/deepseek-ai/...") is host-billed, so it gets a one-shot warning
  * instead of any peak claim: "DeepSeek model is hosted via '<provider>'
@@ -57,7 +60,7 @@ function refresh(model: { provider: string; id: string } | undefined, ctx: Exten
 			ctx.ui.notify(PEAK_NOTICE, "warning");
 			ctx.ui.setStatus(STATUS_KEY, PEAK_STATUS);
 		} else {
-			ctx.ui.notify(OFFPEAK_NOTICE, "info");
+			ctx.ui.notify(OFFPEAK_NOTICE, "warning"); // see header: info renders dim/invisible
 			ctx.ui.setStatus(STATUS_KEY, OFFPEAK_STATUS);
 		}
 		return;

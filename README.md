@@ -8,9 +8,14 @@ Warning: ⚠️ Peak Hours        ← one-shot notice, at session start or when 
 …  ⚠️ deepseek: PEAK (2×)     ← persistent footer status while the active model is DeepSeek
 ```
 
-Off-peak you instead get an info notice `✅ Off-Peak Hours` and footer status
+Off-peak you instead get a notice `✅ Off-Peak Hours` and footer status
 `deepseek: off-peak`. Switch to any non-DeepSeek model and the footer clears —
 no notice, no status.
+
+Both notices ride pi's `warning` channel. (pi's `info` severity renders as a
+dim, unprefixed chat line that is effectively invisible on some themes —
+verified in the author's TUI 2026-09-11 — so the extension opts into the one
+high-contrast one-shot channel pi offers; the emoji is the distinguisher.)
 
 ## The peak rule
 

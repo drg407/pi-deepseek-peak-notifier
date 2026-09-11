@@ -75,8 +75,8 @@ const OFFPEAK_NOW = "2026-09-10T12:00:00Z"; // Thursday, outside all windows
 	const { ctx, calls } = makeCtx(deepseek);
 	handlers.session_start({ reason: "startup" }, ctx);
 	check(
-		"session_start off-peak: info '✅ Off-Peak Hours'",
-		calls.some((c) => c.text === "✅ Off-Peak Hours" && c.severity === "info"),
+		"session_start off-peak: warning '✅ Off-Peak Hours' (info renders dim/invisible — see src header)",
+		calls.some((c) => c.text === "✅ Off-Peak Hours" && c.severity === "warning"),
 		JSON.stringify(calls),
 	);
 	check(
